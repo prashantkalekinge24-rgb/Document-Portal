@@ -1,0 +1,4 @@
+node_modules
+documents.db
+uploads
+.env
