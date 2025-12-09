@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
+import { API_BASE_URL } from "./config";
 
 const App = () => {
   const [file, setFile] = useState(null);
@@ -10,13 +11,13 @@ const App = () => {
 
   const fetchDocuments = async () => {
     try {
-      const res = await fetch("/documents");
+      const res = await fetch(`${API_BASE_URL}/documents`);
       const data = await res.json();
-      setDocuments(data);
+      setDocuments(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error(err);
       setMessageType("error");
-      setMessage("Failed to load documents");
+      setMessage("Failed to load documents.");
     }
   };
 
@@ -49,7 +50,7 @@ const App = () => {
 
     try {
       setLoading(true);
-      const res = await fetch("/documents/upload", {
+      const res = await fetch(`${API_BASE_URL}/documents/upload`, {
         method: "POST",
         body: formData,
       });
@@ -58,7 +59,7 @@ const App = () => {
 
       if (!res.ok) {
         setMessageType("error");
-        setMessage(data.error || "Upload failed.");
+        setMessage(data?.error || "Upload failed.");
         return;
       }
 
@@ -78,7 +79,8 @@ const App = () => {
   };
 
   const handleDownload = (id) => {
-    window.location.href = `/documents/${id}`;
+    // Use full backend URL so it works from Vercel too
+    window.location.href = `${API_BASE_URL}/documents/${id}`;
   };
 
   const handleDelete = async (id) => {
@@ -88,7 +90,7 @@ const App = () => {
 
     try {
       setLoading(true);
-      const res = await fetch(`/documents/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/documents/${id}`, {
         method: "DELETE",
       });
 
@@ -96,7 +98,7 @@ const App = () => {
 
       if (!res.ok) {
         setMessageType("error");
-        setMessage(data.error || "Delete failed.");
+        setMessage(data?.error || "Delete failed.");
         return;
       }
 
