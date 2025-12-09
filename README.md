@@ -122,3 +122,4 @@ curl -X DELETE http://localhost:4000/documents/1
 - No authentication is implemented (as per the assignment, assume a single user).
 - Only PDF files up to 10 MB are accepted.
 - If the database record exists but the file is missing on disk, the backend returns a `410` error.
+# Document-Portal
